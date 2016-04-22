@@ -19,11 +19,12 @@ JDK_FILE_NAME=$(echo $LINK_JDK_DOWNLOAD | cut -d/ -f$(expr $(echo $LINK_JDK_DOWN
 TOMCAT_FILE_NAME=$(echo $LINK_TOMCAT_DOWNLOAD | cut -d/ -f$(expr $(echo $LINK_TOMCAT_DOWNLOAD | grep -o '/' | wc -l) + 1))
 
 DownloadJDK(){
-    wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $(echo $LINK_JDK_DOWNLOAD)
+    wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
+     -O $JDK_FILE_NAME $(echo $LINK_JDK_DOWNLOAD)
 }
 
 DownloadTomcat(){
-    wget --no-check-certificate --no-cookies $(echo $LINK_TOMCAT_DOWNLOAD)
+    wget --no-check-certificate --no-cookies -O $TOMCAT_FILE_NAME $(echo $LINK_TOMCAT_DOWNLOAD)
 }
 
 VerifyMD5JDK(){
