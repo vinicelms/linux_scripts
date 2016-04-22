@@ -18,6 +18,10 @@ MD5_TOMCAT_ORIGINAL='b1a57b6883ef098121035992a61ed0c6'
 JDK_FILE_NAME=$(echo $LINK_JDK_DOWNLOAD | cut -d/ -f$(expr $(echo $LINK_JDK_DOWNLOAD | grep -o '/' | wc -l ) + 1))
 TOMCAT_FILE_NAME=$(echo $LINK_TOMCAT_DOWNLOAD | cut -d/ -f$(expr $(echo $LINK_TOMCAT_DOWNLOAD | grep -o '/' | wc -l) + 1))
 
+# Set name project
+JDK_PROJECT_NAME=$(echo $JDK_FILE_NAME | cut -d- -f1,2 | sed 's/\-//g')
+TOMCAT_PROJECT_NAME=$(echo TOMCAT_FILE_NAME | cut -d- -f2,3 | sed 's/\-//g' | cut -d. -f1,2,3 | sed 's/\./_/g')
+
 DownloadJDK(){
     wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
      -O $JDK_FILE_NAME $(echo $LINK_JDK_DOWNLOAD)
