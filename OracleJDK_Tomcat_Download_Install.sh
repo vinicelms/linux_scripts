@@ -55,3 +55,38 @@ ExtractJDK(){
 ExtractTomcat(){
     tar -zxf $TOMCAT_FILE_NAME
 }
+
+DownloadJDK && clear
+DownloadTomcat && clear
+
+VerifyMD5JDK
+if [ $? -eq 0 ]
+    then
+        echo "Download JDK: Success"
+    else
+        echo "Download JDK: ERROR"
+fi
+
+VerifyMD5Tomcat
+if [ $? -eq 0 ]
+    then
+        echo "Download Tomcat: Success"
+    else
+        echo "Download Tomcat: ERROR"
+fi
+
+ExtractJDK
+if [ $? -eq 0 ]
+    then
+        echo "Extract JDK: Success"
+    else
+        echo "Extract JDK: ERROR"
+fi
+
+ExtractTomcat
+if [ $? -eq 0 ]
+    then
+        echo "Extract Tomcat: Success"
+    else
+        echo "Extract Tomcat: ERROR"
+fi
