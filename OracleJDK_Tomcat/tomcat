@@ -1,0 +1,43 @@
+#! /bin/sh
+# /etc/init.d/tomcat8
+
+### BEGIN INIT INFO
+# Provides: tomcat8
+# Required-Start: $remote_fs $syslog
+# Required-Stop: $remote_fs $syslog
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Start Tomcat8 at boot time
+# Description: Enable service provided by daemon
+### END INIT INFO
+
+# Developed by: Vinicius Celms
+# Date: 2016/04/22
+# Description: Control Tomcat8 Server
+
+JAVA_HOME=/usr/lib/jvm/jdk8u77
+export JAVA_HOME
+
+tomcat=TOMCAT_SYSTEM_DIRECTORY
+
+case "$1" in
+    start)
+        echo "Starting Script Tomcat8"
+        $tomcat/bin/startup.sh
+        ;;
+    stop)
+        echo "Stopping Script Tomcat8"
+        $tomcat/bin/shutdown.sh
+        ;;
+    restart)
+        echo "Restarting Script Tomcat8"
+        $tomcat/bin/shutdown.sh
+        $tomcat/bin/startup.sh
+        ;;
+    *)
+        echo "Usage: /etc/init.d/tomcat8 {start|restart|stop}"
+        exit 1
+        ;;
+esac
+
+exit 0
