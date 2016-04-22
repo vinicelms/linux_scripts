@@ -31,9 +31,9 @@ VerifyMD5JDK(){
     
     if [ $MD5_JDK_ORIGINAL == $MD5_JDK_GENERATED ]
     then
-        return "Sucess"
+        return 0
     else
-        return "ERROR"
+        return 1
     fi
 }
 
@@ -42,9 +42,9 @@ VerifyMD5Tomcat(){
 
     if [ $MD5_TOMCAT_ORIGINAL == $MD5_TOMCAT_GENERATED ]
     then
-        return "Sucess"
+        return 0
     else
-        return "ERROR"
+        return 1
     fi   
 }
 
