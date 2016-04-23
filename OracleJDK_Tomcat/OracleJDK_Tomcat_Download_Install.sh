@@ -28,9 +28,11 @@ JDK_DIRECTORY_NAME=""
 TOMCAT_DIRECTORY_NAME=""
 
 # Set System Directory
-JDK_SYSTEM_DIRECTORY="/usr/lib/jvm/"
-TOMCAT_SYSTEM_DIRECTORY="/opt/"
-export TOMCAT_SYSTEM_DIRECTORY
+JDK_SYSTEM_DIRECTORY="/usr/lib/jvm"
+TOMCAT_SYSTEM_DIRECTORY="/opt"
+
+# Set file name to control service Tomcat
+TOMCAT_SERVICE_CONTROL="$(echo $TOMCAT_PROJECT_NAME | cut -d_ -f1)"
 
 DownloadJDK(){
     wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
@@ -102,10 +104,31 @@ export PATH JAVA_HOME CLASSPATH"
     echo -e $JDK_WRITE >> /etc/profile
 }
 
+ChangeVariableValueTomcatFile(){
+    sed -i "s/TOMCAT=TOMCAT_SYSTEM_DIRECTORY/TOMCAT=\\$TOMCAT_SYSTEM_DIRECTORY\/$TOMCAT_PROJECT_NAME/g" tomcat
+    sed -i "s/JAVA_HOME=JDK_SYSTEM_DIRECTORY/JAVA_HOME=$(echo $JDK_SYSTEM_DIRECTORY/$JDK_PROJECT_NAME | sed 's/\//\\\//g')/g" tomcat
+}
 
+RenameTomcatFile(){
+    mv tomcat $(echo $TOMCAT_PROJECT_NAME | cut -d_ -f1)
+}
 
-DownloadJDK && clear
-DownloadTomcat && clear
+InstallServiceTomcat(){
+    mv $(echo $TOMCAT_PROJECT_NAME | cut -d_ -f1) /etc/init.d/
+    update-rc.d tomcat8 defaults &>/dev/null
+}
+
+StartApplications(){
+    source /etc/profile
+    service $TOMCAT_SERVICE_CONTROL start
+}
+
+RemoveFilesDownloaded(){
+    rm -rf $JDK_FILE_NAME $TOMCAT_FILE_NAME
+}
+
+# DownloadJDK && clear
+# DownloadTomcat && clear
 
 VerifyMD5JDK
 if [ $? -eq 0 ]
@@ -177,4 +200,44 @@ if [ $? -eq 0 ]
         echo "Declaration JDK in /etc/profile: Success"
     else
         echo "Declaration JDK in /etc/profile: ERROR"
+fi
+
+ChangeVariableValueTomcatFile
+if [ $? -eq 0 ]
+    then
+        echo "Change Tomcat variable in file to control service: Success"
+    else
+        echo "Change Tomcat variable in file to control service: ERROR"
+fi
+
+RenameTomcatFile
+if [ $? -eq 0 ]
+    then
+        echo "Rename Tomcat file to control service: Success"
+    else
+        echo "Rename Tomcat file to control service: ERROR"
+fi
+
+InstallServiceTomcat
+if [ $? -eq 0 ]
+    then
+        echo "Service Tomcat: Success"
+    else
+        echo "Service Tomcat: ERROR"
+fi
+
+StartApplications
+if [ $? -eq 0 ]
+    then
+        echo "Starting Applications: Success"
+    else
+        echo "Starting Applications: ERROR"
+fi
+
+RemoveFilesDownloaded
+if [ $? -eq 0 ]
+    then
+        echo "Remove files Downloaded: Success"
+    else
+        echo "Remove files Downloaded: ERROR"
 fi
