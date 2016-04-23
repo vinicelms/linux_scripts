@@ -5,7 +5,9 @@ This script is designed for personal use on the ground to download and install O
 Some variables may assist in handling this script if interest use.
 
 > **JDK:** _http://www.java.com/en/download/faq/develop.xml_
+
 > **Tomcat:** _https://tomcat.apache.org/index.html_
+
 > This script was developed for use in Debian. It not tested in other systems. Debian 8.4 was used.
 
 ## Tools used in the script
