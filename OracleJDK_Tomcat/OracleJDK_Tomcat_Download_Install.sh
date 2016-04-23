@@ -127,8 +127,8 @@ RemoveFilesDownloaded(){
     rm -rf $JDK_FILE_NAME $TOMCAT_FILE_NAME
 }
 
-# DownloadJDK && clear
-# DownloadTomcat && clear
+DownloadJDK && clear
+DownloadTomcat && clear
 
 VerifyMD5JDK
 if [ $? -eq 0 ]
@@ -136,6 +136,7 @@ if [ $? -eq 0 ]
         echo "Download JDK: Success"
     else
         echo "Download JDK: ERROR"
+        exit 1
 fi
 
 VerifyMD5Tomcat
@@ -144,6 +145,7 @@ if [ $? -eq 0 ]
         echo "Download Tomcat: Success"
     else
         echo "Download Tomcat: ERROR"
+        exit 1
 fi
 
 ExtractJDK
@@ -152,6 +154,7 @@ if [ $? -eq 0 ]
         echo "Extract JDK: Success"
     else
         echo "Extract JDK: ERROR"
+        exit 1
 fi
 
 ExtractTomcat
@@ -160,6 +163,7 @@ if [ $? -eq 0 ]
         echo "Extract Tomcat: Success"
     else
         echo "Extract Tomcat: ERROR"
+        exit 1
 fi
 
 ChangeDirectoryNameJDK
@@ -168,6 +172,7 @@ if [ $? -eq 0 ]
         echo "Change Directory Name JDK: Success"
     else
         echo "Change Directory Name JDK: ERROR"
+        exit 1
 fi
 
 ChangeDirectoryNameTomcat
@@ -176,6 +181,7 @@ if [ $? -eq 0 ]
         echo "Change Directory Name Tomcat: Success"
     else
         echo "Change Directory Name Tomcat: ERROR"
+        exit 1
 fi
 
 MoveJDKSystemDirectory # Needs Super User
@@ -184,6 +190,7 @@ if [ $? -eq 0 ]
         echo "Move JDK to $JDK_SYSTEM_DIRECTORY: Success"
     else
         echo "Move JDK to $JDK_SYSTEM_DIRECTORY: ERROR"
+        exit 1
 fi
 
 MoveTomcatSystemDirectory # Needs Super User
@@ -192,6 +199,7 @@ if [ $? -eq 0 ]
         echo "Move Tomcat to $TOMCAT_SYSTEM_DIRECTORY: Success"
     else
         echo "Move Tomcat to $TOMCAT_SYSTEM_DIRECTORY: ERROR"
+        exit 1
 fi
 
 WriteJDKDefinitions
@@ -200,6 +208,7 @@ if [ $? -eq 0 ]
         echo "Declaration JDK in /etc/profile: Success"
     else
         echo "Declaration JDK in /etc/profile: ERROR"
+        exit 1
 fi
 
 ChangeVariableValueTomcatFile
@@ -208,6 +217,7 @@ if [ $? -eq 0 ]
         echo "Change Tomcat variable in file to control service: Success"
     else
         echo "Change Tomcat variable in file to control service: ERROR"
+        exit 1
 fi
 
 RenameTomcatFile
@@ -216,6 +226,7 @@ if [ $? -eq 0 ]
         echo "Rename Tomcat file to control service: Success"
     else
         echo "Rename Tomcat file to control service: ERROR"
+        exit 1
 fi
 
 InstallServiceTomcat
@@ -224,6 +235,7 @@ if [ $? -eq 0 ]
         echo "Service Tomcat: Success"
     else
         echo "Service Tomcat: ERROR"
+        exit 1
 fi
 
 StartApplications
@@ -232,6 +244,7 @@ if [ $? -eq 0 ]
         echo "Starting Applications: Success"
     else
         echo "Starting Applications: ERROR"
+        exit 1
 fi
 
 RemoveFilesDownloaded
@@ -240,4 +253,7 @@ if [ $? -eq 0 ]
         echo "Remove files Downloaded: Success"
     else
         echo "Remove files Downloaded: ERROR"
+        exit 1
 fi
+
+exit 0
