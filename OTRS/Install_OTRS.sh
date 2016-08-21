@@ -5,5 +5,50 @@
 # Created by: Vinicius Celms
 # Date: 20/08/2016
 # Version: 1.0
+#
+# Documentation to develop this script: https://otrs.github.io/doc/manual/admin/5.0/en/html/manual-installation-of-otrs.html
 # 
 
+# Link to download OTRS and static directory to OTRS project
+OTRS_DL_LINK="http://ftp.otrs.org/pub/otrs/otrs-5.0.12.tar.gz"
+STATIC_PROJECT_DIRECTORY=/opt/otrs
+
+# Name of file
+OTRS_FILE_NAME=$(echo $OTRS_DL_LINK | cut -d/ -f$(expr $(echo $OTRS_DL_LINK | grep -o '/' | wc -l) + 1))
+
+# Download file
+DownloadFile(){
+    wget -O $OTRS_FILE_NAME $OTRS_DL_LINK
+}
+
+# Inflate files and define name of project
+InflateFiles(){
+    PROJECT_NAME_INFLATED=$(tar -tf $OTRS_FILE_NAME | head -1 | cut -d/ -f1)
+    tar -zxf $OTRS_FILE_NAME
+}
+
+# Move files to static directory
+MoveFiles(){
+    mv $PROJECT_NAME_INFLATED $STATIC_PROJECT_DIRECTORY
+}
+
+# Install dependencies
+InstallDependencies(){
+# To verify all dependencies use 'perl /opt/otrs/bin/otrs.CheckModules.pl'
+    apt-get install -y libarchive-zip-perl libcrypt-eksblowfish-perl libcrypt-ssleay-perl libdbi-perl \ 
+    libdbd-mysql-perl libdbd-odbc-perl libdbd-pg-perl libencode-hanextra-perl libjson-xs-perl \
+    libmail-imapclient-perl libapache2-mod-perl2 libnet-dns-perl libnet-ldap-perl libtemplate-perl \
+    libtext-csv-xs-perl libxml-libxslt-perl libyaml-libyaml-perl libdigest-md5-perl
+}
+
+# Create user OTRS
+CreateUser(){
+    useradd -d $STATIC_PROJECT_DIRECTORY -c 'OTRS user' otrs
+    usermod -G www-data otrs
+}
+
+# Activate default config files
+ActivateConfig(){
+    cd $STATIC_PROJECT_DIRECTORY
+    cp Kernel/Config.pm.dist Kernel/Config.pm
+}
