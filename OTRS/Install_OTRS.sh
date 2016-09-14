@@ -25,6 +25,41 @@ PrintMessage(){
 OTRS_FILE_NAME=$(echo $OTRS_DL_LINK | cut -d/ -f$(expr $(echo $OTRS_DL_LINK | grep -o '/' | wc -l) + 1))
 PROJECT_NAME_INFLATED=""
 
+# Backup of changed files
+BackupFiles(){
+    FILES_EXIST=""
+    if [ -f /etc/mysql/my.cnf ]
+        then
+            SCRIPT_PATH=$(pwd)
+            SCRIPT_PATH=$SCRIPT_PATH/backup_files_otrs
+            mkdir backup_files_otrs
+            cp /etc/mysql/my.cnf $SCRIPT_PATH
+            if [ $? -eq 0 ]
+                then
+                    PrintMessage "Backup file (/etc/mysql/my.cnf): Success"
+                else
+                    PrintMessage "Backup file (/etc/mysql/my.cnf): Error"
+            fi
+        else
+            PrintMessage "Backup file (/etc/mysql/my.cnf): Does not exist (Success)"
+            if [ -f /var/lib/mysql/ib_logfile0 ]
+                then
+                    SCRIPT_PATH=$(pwd)
+                    SCRIPT_PATH=$SCRIPT_PATH/backup_files_otrs
+                    mkdir backup_files_otrs
+                    cp /var/lib/mysql/ib_logfile* $SCRIPT_PATH
+                    if [ $? -eq 0 ]
+                        then
+                            PrintMessage "Backup file (/var/lib/mysql/ib_logfile*): Success"
+                        else
+                            PrintMessage "Backup file (/var/lib/mysql/ib_logfile*): Error"
+                    fi
+                else
+                    PrintMessage "Backup file (/var/lib/mysql/ib_logfile*): Does not exist (Success)"
+            fi
+    fi
+}
+
 # Download file
 DownloadFile(){
     wget -O $OTRS_FILE_NAME $OTRS_DL_LINK
@@ -64,7 +99,7 @@ ActivateConfig(){
 
 # Check if all needed modules are installed
 CheckModules(){
-    perl -cw perl -cw $STATIC_PROJECT_DIRECTORY/bin/cgi-bin/index.pl
+    perl -cw $STATIC_PROJECT_DIRECTORY/bin/cgi-bin/index.pl
     if [ $? -eq 0 ]
     then
         PrintMessage "Index module: Success"
@@ -122,6 +157,39 @@ ConfigureApacheWebServer(){
         else
             PrintMessage "Apache Module (Headers): Error"
     fi
+
+    cp -va /opt/otrs/scripts/apache2-httpd.include.conf /etc/apache2/sites-available/otrs.conf
+    if [ $? -eq 0 ]
+        then
+            PrintMessage "Copy include Apache: Success"
+        else
+            PrintMessage "Copy include Apache: Error"
+    fi
+
+    cd /etc/apache2/sites-available/
+    chown root:root otrs.conf
+    if [ $? -eq 0 ]
+        then
+            PrintMessage "Change owner file Apache: Success"
+        else
+            PrintMessage "Change owner file Apache: Error"
+    fi
+
+    a2ensite otrs
+    if [ $? -eq 0 ]
+        then
+            PrintMessage "Enable site Apache: Success"
+        else
+            PrintMessage "Enable site Apache: Error"
+    fi
+
+    service apache2 reload
+    if [ $? -eq 0 ]
+        then
+            PrintMessage "Restart Apache: Success"
+        else
+            PrintMessage "Restart Apache: Error"
+    fi
 }
 
 # Adjust file permissions to OTRS user
@@ -132,7 +200,6 @@ FilePermission(){
 # Configure MySQL config file
 ConfigureMysqlFile(){
     STATIC_MAXALLOWED=20M
-    STATI
 
     FINE_TUNING_LINE=$(awk '/Fine Tuning/{ print NR; exit }' /etc/mysql/my.cnf)
     FINE_TUNING_LINE=$(expr $FINE_TUNING_LINE + 2)
@@ -178,11 +245,15 @@ ConfigureMysqlFile(){
         else
             PrintMessage "MySQL config (QUERY_CACHE_SIZE): Error"
     fi
+
+    service mysql stop
+    rm -rf /var/lib/mysql/ib_logfile*
+    service mysql start
 }
 
 # Start Daemon
 StartDaemon(){
-    runuser -l otrs -c "/opt/otrs/bin/otrs.Daemon.pl start"
+    su -c "bin/otrs.Daemon.pl start" -s /bin/bash otrs
 }
 
 # Set Daemon in CronJobs
@@ -193,8 +264,10 @@ SetDaemonCron(){
 
 # Schedule Daemon on CronJobs
 ScheduleDaemonCron(){
-    runuser -l otrs -c "/opt/otrs/bin/Cron.sh start"
+    su -c "/opt/otrs/bin/Cron.sh start" -s /bin/bash otrs
 }
+
+BackupFiles
 
 DownloadFile
 if [ $? -eq 0 ]
@@ -202,6 +275,22 @@ if [ $? -eq 0 ]
         PrintMessage "Download file: Success"
     else
         PrintMessage "Download file: Error"
+fi
+
+InflateFiles
+if [ $? -eq 0 ]
+    then
+        PrintMessage "Inflate files: Success"
+    else
+        PrintMessage "Inflate files: Error"
+fi
+
+MoveFiles
+if [ $? -eq 0 ]
+    then
+        PrintMessage "Move files: Success"
+    else
+        PrintMessage "Move files: Error"
 fi
 
 InstallDependencies
