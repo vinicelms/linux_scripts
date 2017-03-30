@@ -50,7 +50,7 @@ if [ $? -eq 0 ]
 fi
 
 # Move files MediaWiki directory ($MEDIAWIKI_STATIC_DIRECTORY)
-mv $(echo $MEDIAWIKI_NAME | cut -d. -f-$(expr $($MEDIAWIKI_NAME | grep -o '\.' | wc -l) - 1)) $MEDIAWIKI_STATIC_DIRECTORY
+mv $(echo $MEDIAWIKI_NAME | cut -d. -f-$(expr $(echo $MEDIAWIKI_NAME | grep -o '\.' | wc -l) - 1)) $MEDIAWIKI_STATIC_DIRECTORY
 if [ $? -eq 0 ]
 	then
 		PrintMessage "Move files to $MEDIAWIKI_STATIC_DIRECTORY: Success"
