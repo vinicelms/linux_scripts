@@ -31,6 +31,15 @@ if [ $? -eq 0 ]
 		PrintMessage "Install requirements: Error"
 fi
 
+# Download MediaWiki
+wget -O $MEDIAWIKI_NAME $LINK_MEDIAWIKI_DOWNLOAD
+if [ $? -eq 0 ]
+	then
+		PrintMessage "Download MediaWiki: Success"
+	else
+		PrintMessage "Download MediaWiki: Error"
+fi
+
 # Inflate files
 tar -zxf $MEDIAWIKI_NAME
 if [ $? -eq 0 ]
@@ -59,7 +68,7 @@ UPLOADFILESIZE_INFO=$(sed $UPLOADFILESIZE_LINE"q;d" /etc/php5/apache2/php.ini)
 UPLOADFILESIZE_INFO=$(echo ${UPLOADFILESIZE_INFO: -3})
 
 # Set value to upload_max_filesize
-UPLOADFILESIZE_INFO=$UPLOADFILESIZE_LINE"s/"$UPLOADFILESIZE_INFO"${UPLOAD_FILESIZE_PARAM}"
+UPLOADFILESIZE_INFO=$UPLOADFILESIZE_LINE"s/"$UPLOADFILESIZE_INFO"/${UPLOAD_FILESIZE_PARAM}/"
 sed -i "$(echo $UPLOADFILESIZE_INFO)" /etc/php5/apache2/php.ini
 if [ $? -eq 0 ]
 	then
@@ -76,7 +85,7 @@ MEMORYLIMIT_INFO=$(sed $MEMORYLIMIT_LINE"q;d" /etc/php5/apache2/php.ini)
 MEMORYLIMIT_INFO=$(echo ${MEMORYLIMIT_INFO: -3})
 
 # Set value to memory_limit
-MEMORYLIMIT_INFO=$MEMORYLIMIT_LINE"s/"$MEMORYLIMIT_INFO"${MEMORY_LIMIT_PARAM}"
+MEMORYLIMIT_INFO=$MEMORYLIMIT_LINE"s/"$MEMORYLIMIT_INFO"/${MEMORY_LIMIT_PARAM}/"
 sed -i "$(echo $MEMORYLIMIT_INFO)" /etc/php5/apache2/php.ini
 if [ $? -eq 0 ]
 	then
