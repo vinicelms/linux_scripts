@@ -115,9 +115,10 @@ fi
 
 # Create user and database in PostgreSQL
 clear
-read -p "Type username to PostgreSQL: " username
-read -p "Type password to PostgreSQL: " password
-read -p "Type database to PostgreSQL: " database
+echo "Type infos to PostgreSQL"
+read -p "Type username: " username
+read -s -p "Type password: " password
+read -p "Type database: " database
 
 su -c "psql -c \"CREATE USER ${username} WITH ENCRYPTED PASSWORD '${password}';\"" -s /bin/bash postgres
 if [ $? -eq 0 ]
