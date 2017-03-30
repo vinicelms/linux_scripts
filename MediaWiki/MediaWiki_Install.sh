@@ -135,3 +135,6 @@ if [ $? -eq 0 ]
 	else
 		PrintMessage "Create database: Error"
 fi
+
+# Restart Apache to recognize all modules
+service apache2 restart
