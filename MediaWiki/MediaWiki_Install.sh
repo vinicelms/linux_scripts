@@ -96,7 +96,7 @@ fi
 
 # Create symbolic link from MediaWiki directory ($MEDIAWIKI_STATIC_DIRECTORY)
 cd /var/www/html
-ln -s $MEDIAWIKI_STATIC_DIRECTORY $(echo $MEDIAWIKI_STATIC_DIRECTORY | cut -d/ -f$(expr $(echo $MEDIAWIKI_STATIC_DIRECTORY | grep -o '/' | wc -l ) + 1))
+ln -s $MEDIAWIKI_STATIC_DIRECTORY /var/www/html/$(echo $MEDIAWIKI_STATIC_DIRECTORY | cut -d/ -f$(expr $(echo $MEDIAWIKI_STATIC_DIRECTORY | grep -o '/' | wc -l ) + 1))
 if [ $? -eq 0 ]
 	then
 		PrintMessage "Create symbolic link from MediaWiki: Success"
@@ -111,4 +111,26 @@ if [ $? -eq 0 ]
 		PrintMessage "Delete downloaded file: Success"
 	else
 		PrintMessage "Delete downloaded file: Error"
+fi
+
+# Create user and database in PostgreSQL
+clear
+read -p "Type username to PostgreSQL: " username
+read -p "Type password to PostgreSQL: " password
+read -p "Type database to PostgreSQL: " database
+
+su -c "psql -c \"CREATE USER ${username} WITH ENCRYPTED PASSWORD '${password}';\"" -s /bin/bash postgres
+if [ $? -eq 0 ]
+	then
+		PrintMessage "Create user: Success"
+	else
+		PrintMessage "Create user: Error"
+fi
+
+su -c "psql -c \"CREATE DATABASE ${database} OWNER ${username};\"" -s /bin/bash postgres
+if [ $? -eq 0 ]
+	then
+		PrintMessage "Create database: Success"
+	else
+		PrintMessage "Create database: Error"
 fi
