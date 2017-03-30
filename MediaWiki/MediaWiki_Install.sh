@@ -23,7 +23,7 @@ UPLOAD_FILESIZE_PARAM=20M
 MEMORY_LIMIT_PARAM=128M
 
 # Install requirements
-apt-get install apache2 postgresql php5 php5-pgsql libapache2-mod-php5 php5-apcu imagemagick php5-intl
+apt-get install -y apache2 postgresql php5 php5-pgsql libapache2-mod-php5 php5-apcu imagemagick php5-intl
 if [ $? -eq 0 ]
 	then
 		PrintMessage "Install requirements: Success"
