@@ -82,7 +82,7 @@ MEMORYLIMIT_LINE=$(awk '/memory_limit/{ print NR; exit}' /etc/php5/apache2/php.i
 
 # Get memory_limit value
 MEMORYLIMIT_INFO=$(sed $MEMORYLIMIT_LINE"q;d" /etc/php5/apache2/php.ini)
-MEMORYLIMIT_INFO=$(echo ${MEMORYLIMIT_INFO: -3})
+MEMORYLIMIT_INFO=$(echo ${MEMORYLIMIT_INFO: -4})
 
 # Set value to memory_limit
 MEMORYLIMIT_INFO=$MEMORYLIMIT_LINE"s/"$MEMORYLIMIT_INFO"/${MEMORY_LIMIT_PARAM}/"
