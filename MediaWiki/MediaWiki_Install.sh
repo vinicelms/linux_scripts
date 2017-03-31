@@ -95,7 +95,6 @@ if [ $? -eq 0 ]
 fi
 
 # Create symbolic link from MediaWiki directory ($MEDIAWIKI_STATIC_DIRECTORY)
-cd /var/www/html
 ln -s $MEDIAWIKI_STATIC_DIRECTORY /var/www/html/$(echo $MEDIAWIKI_STATIC_DIRECTORY | cut -d/ -f$(expr $(echo $MEDIAWIKI_STATIC_DIRECTORY | grep -o '/' | wc -l ) + 1))
 if [ $? -eq 0 ]
 	then

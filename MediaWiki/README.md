@@ -29,3 +29,15 @@ Some variables may assist in handling this script if interest use.
 
 ### Automatically generated variables
 - **MEDIAWIKI_NAME** - _Gets the file name according to the download link in the variable `LINK_MEDIAWIKI_DOWNLOAD`_
+
+## After run script
+Go to the `home page` and follow the procedures to configure MediaWiki
+
+**Home page:** [URL]/`MEDIAWIKI_STATIC_DIRECTORY`
+
+### Example
+Using the variable with value of **"/var/lib/myWiki"**, the endpoint of the directory location will be **"myWiki"**
+```shell
+MEDIAWIKI_STATIC_DIRECTORY=/var/lib/myWiki
+```
+**Home page example:** http://127.0.0.1/myWiki
