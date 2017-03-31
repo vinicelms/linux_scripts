@@ -25,7 +25,7 @@ Some variables may assist in handling this script if interest use.
 - **LINK_MEDIAWIKI_DOWNLOAD** - _Link to download MediaWiki (Regardless of the version)_
 - **MEDIAWIKI_STATIC_DIRECTORY** - _Directory to define where you want to keep the MediaWiki_
 - **UPLOAD_FILESIZE_PARAM** - _Parameter to define filesize upload in PHP_
-- **MEMORY_LIMIT_PARAM** - _Parameter to define memory limite of PHP consume_
+- **MEMORY_LIMIT_PARAM** - _Parameter to define memory limit of PHP consume_
 
 ### Automatically generated variables
 - **MEDIAWIKI_NAME** - _Gets the file name according to the download link in the variable `LINK_MEDIAWIKI_DOWNLOAD`_
