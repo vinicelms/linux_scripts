@@ -16,7 +16,7 @@ PrintMessage(){
 }
 
 # JDK - Link and MD5 hash to verify integrity
-LINK_JDK_DOWNLOAD='http://download.oracle.com/otn-pub/java/jdk/8u121-b13/e9e7ea248e2c4826b92b3f075a80e441/jre-8u121-linux-x64.tar.gz'
+LINK_JDK_DOWNLOAD='http://download.oracle.com/otn-pub/java/jdk/8u121-b13/e9e7ea248e2c4826b92b3f075a80e441/jdk-8u121-linux-x64.tar.gz'
 MD5_JDK_ORIGINAL='91972fb4e753f1b6674c2b952d974320'
 
 # Get name file that it will be downloaded
@@ -37,7 +37,6 @@ if [ $? -eq 0 ]
 		PrintMessage "Download JDK: Success"
 	else
 		PrintMessage "Download JDK: Error"
-		exit 1
 fi
 
 # Check download JDK integrity
@@ -47,7 +46,6 @@ if [ $MD5_JDK_ORIGINAL == $MD5_JDK_GENERATED ]
 		PrintMessage "MD5 JDK: Success"
 	else
 		PrintMessage "MD5 JDK: Error"
-		exit 1
 fi
 
 # Inflate JDK files
@@ -58,7 +56,6 @@ if [ $? -eq 0 ]
 		PrintMessage "Inflate JDK files: Success"
 	else
 		PrintMessage "Inflate JDK files: Error"
-		exit 1
 fi
 
  # Move JDK to System Directory
@@ -68,7 +65,6 @@ fi
  		PrintMessage "Move JDK files to ${JDK_SYSTEM_DIRECTORY}: Success"
  	else
  		PrintMessage "Move JDK files to ${JDK_SYSTEM_DIRECTORY}: Error"
- 		exit 1
  fi
 
  # Write JDK info in /etc/profile to Path Variable Environment
@@ -85,7 +81,6 @@ if [ $? -eq 0 ]
 		PrintMessage "Write JDK info in /etc/profile: Success"
 	else
 		PrintMessage "Write JDK info in /etc/profile: Error"
-		exit 1
 fi
 
 # Reaload file /etc/profile
@@ -95,7 +90,6 @@ if [ $? -eq 0 ]
 		PrintMessage "Reload file /etc/profile: Success"
 	else
 		PrintMessage "Reload file /etc/profile: Error"
-		exit 1
 fi
 
 # Remove downloaded files
@@ -105,5 +99,4 @@ if [ $? -eq 0 ]
 		PrintMessage "Remove JDK file: Success"
 	else
 		PrintMessage "Remove JDK file: Error"
-		exit 1
 fi
